@@ -75,8 +75,8 @@ function smarty_function_touchfastcss($params, &$smarty) {
 	while ($result && $row = $result->FetchRow()){
 
 		$media = $row['media_type'] ? $row['media_type'] : 'all';
-		$css[$media]['file'] = $tpl_id . "-" . $media . "-" . "touchfastcss" . ".css";
-		$css[$media]['contents'] .= "\n\n/* @@@ Plugin ". "touchfastcss" ." @@@ cssId: " 
+		$css[$media]['file'] = $tpl_id . "-" . $media . "-" . "touchFastCss" . ".css";
+		$css[$media]['contents'] .= "\n\n/* @@@ Plugin ". "touchFastCss" ." @@@ cssId: " 
 			. $row['css_id'] . ", cssName: " . $row['css_name'] . ", cssModified: " 
 			. $row['modified_date'] . " */\n\n";
 
@@ -107,7 +107,7 @@ function smarty_function_touchfastcss($params, &$smarty) {
 		}
 	}
 
-	return $html;
+	return "\n<!-- touchFastCss plugin -->\n" . $html . "<!-- touchFastCss plugin -->\n";
 }
 
 function isMobile() {
