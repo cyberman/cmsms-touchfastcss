@@ -75,27 +75,28 @@ function smarty_function_touchfastcss($params, &$smarty) {
 	while ($result && $row = $result->FetchRow()){
 
 		$media = $row['media_type'] ? $row['media_type'] : 'all';
-		$css[$media]['file'] = $tpl_id . "-" . $media . "-" . "touchFastCss" . ".css";
-		$css[$media]['contents'] .= "\n\n/* @@@ Plugin ". "touchFastCss" ." @@@ cssId: " 
+
+    $css[$media]['file'] = $tpl_id . "-" . $media . "-" . "touchFastCss" . ".css";
+    $css[$media]['headings'] = "/* @@@ Plugin ". "touchFastCss" ." @@@ cssId: " 
 			. $row['css_id'] . ", cssName: " . $row['css_name'] . ", cssModified: " 
-			. $row['modified_date'] . " */\n\n"
-      . $row['css_text'];
-
-		if(!empty($params['replace_relpath'])){
-			$css[$media]['contents'] = preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $css[$media]['contents']);
-		}
-		if(!empty($params['cleanup'])){
-			$css[$media]['contents'] = preg_replace(array('/\/\*.*?\*\//', '/[\r\n]?/', '/[\s]/'), array('', '', ' '), $css[$media]['contents']);
-		}
-
+			. $row['modified_date'] . " */\n";		
+    $css[$media]['contents'] .= $row['css_text'];
 		$css[$media]['refresh'] = $row['mtime'] > @filemtime($path . DIRECTORY_SEPARATOR . $css[$media]['file']) 
 			? 1 : (int)$css[$media]['refresh'];
 	}
 
 	$html = "";
 	foreach($css AS $m => $c){
-		if(!empty($params['nocache']) || !file_exists($path . DIRECTORY_SEPARATOR . $c['file']) || !empty($c['refresh'])){
-			file_put_contents($path . DIRECTORY_SEPARATOR . $c['file'], $c['contents']);
+
+		if(!empty($params['nocache']) || !file_exists($path . DIRECTORY_SEPARATOR . $c['file']) 
+      || !empty($c['refresh'])){
+      if(!empty($params['replace_relpath'])){
+        $c['contents'] = preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $c['contents']);
+      }
+      if(!empty($params['cleanup'])){
+        $c['contents'] = preg_replace(array('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '/\s+/'), array('',' '), $c['contents']);
+      }
+			file_put_contents($path . DIRECTORY_SEPARATOR . $c['file'], $c['headings'].$c['contents']);
 		}
 		if(!empty($params['chk_mobile']) && isMobile()){
 			if($m == 'handheld'){
