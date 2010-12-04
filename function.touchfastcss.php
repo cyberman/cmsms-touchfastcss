@@ -48,14 +48,14 @@ function smarty_function_touchfastcss($params, &$smarty) {
 	$tpl_id = &$gCms->variables['pageinfo']->template_id;
 
   $defaults = array(
-    'name' => null, 
-    'nocache' => 0,
-    'replace_relpath' => 1, 
+    'name' => null,
+    'force_rewrite' => 0,
+    'replace_relpath' => 1,
     'cleanup' => 0,
     'css_path' => null
   );
   $params = array_merge($defaults,$params);
-
+ 
 	if(!empty($params['css_path'])) {
 		$css_path = $params['css_path'];
 	} else {
@@ -97,7 +97,7 @@ function smarty_function_touchfastcss($params, &$smarty) {
 	$html = "";
 	foreach($css AS $m => $c){
 
-		if(!empty($params['nocache']) || !file_exists($path . DIRECTORY_SEPARATOR . $c['file']) 
+		if(!empty($params['force_rewrite']) || !file_exists($path . DIRECTORY_SEPARATOR . $c['file']) 
       || !empty($c['refresh'])){
       if(!empty($params['replace_relpath'])){
         $c['contents'] = preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $c['contents']);
@@ -152,7 +152,7 @@ function smarty_cms_help_function_touchfastcss() {
 	print "<h3>Params</h3>";
 	print "<ul>";
 	print "	<li><em>(optional)</em> name - Query one template by template name</li>";
-	print "	<li><em>(optional)</em> nocache - Force rewrite css files</li>";
+	print "	<li><em>(optional)</em> force_rewrite - Force rewrite css files</li>";
 	print "	<li><em>(optional)</em> chk_mobile - Check user agent for mobile browser</li>";    
 	print "	<li><em>(optional)</em> css_path - Path for cached css files, default CMSms tmp_dir/static_sytlesheets</li>";
 	print "	<li><em>(optional)</em> replace_relpath - Replace all relative path with absolute url -> background: url(http://www.example.com/tmp/css/name.jpg)</li>";
