@@ -78,10 +78,11 @@ function smarty_function_touchfastcss($params, &$smarty) {
 		$css[$media]['file'] = $tpl_id . "-" . $media . "-" . "touchFastCss" . ".css";
 		$css[$media]['contents'] .= "\n\n/* @@@ Plugin ". "touchFastCss" ." @@@ cssId: " 
 			. $row['css_id'] . ", cssName: " . $row['css_name'] . ", cssModified: " 
-			. $row['modified_date'] . " */\n\n";
+			. $row['modified_date'] . " */\n\n"
+      . $row['css_text'];
 
 		if(!empty($params['replace_relpath'])){
-			$css[$media]['contents'] .= preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $row['css_text']);
+			$css[$media]['contents'] = preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $css[$media]['contents']);
 		}
 		if(!empty($params['cleanup'])){
 			$css[$media]['contents'] = preg_replace(array('/\/\*.*?\*\//', '/[\r\n]?/', '/[\s]/'), array('', '', ' '), $css[$media]['contents']);
