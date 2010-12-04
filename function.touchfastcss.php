@@ -47,6 +47,15 @@ function smarty_function_touchfastcss($params, &$smarty) {
 	$db =& $gCms->GetDb();
 	$tpl_id = &$gCms->variables['pageinfo']->template_id;
 
+  $defaults = array(
+    'name' => null, 
+    'nocache' => 0,
+    'replace_relpath' => 1, 
+    'cleanup' => 0,
+    'css_path' => null
+  );
+  $params = array_merge($defaults,$params);
+
 	if(!empty($params['css_path'])) {
 		$css_path = $params['css_path'];
 	} else {
