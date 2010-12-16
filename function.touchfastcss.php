@@ -110,11 +110,11 @@ function smarty_function_touchfastcss($params, &$smarty) {
 		if(!empty($params['chk_mobile']) && isMobile()){
 			if($m == 'handheld'){
 				$html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
-					. "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
+					. "/" . str_replace("\\","/",$css_path) . "/" . $c['file'] . "' media='".$m."' />\n";
 			}
 		}else{
 			$html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
-				. "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
+				. "/" . str_replace("\\","/",$css_path) . "/" . $c['file'] . "' media='".$m."' />\n";
 		}
 	}
 
