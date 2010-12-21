@@ -78,7 +78,7 @@ function smarty_function_touchfastcss($params, &$smarty) {
       WHERE ac.assoc_type='template' AND ac.assoc_to_id = ".$tpl_id." AND ac.assoc_css_id = c.css_id 
       ORDER BY ac.create_date DESC";
     $result = $db->Execute($sql);
-    }
+  }
 
   $css = array();
   while ($result && $row = $result->FetchRow()){
