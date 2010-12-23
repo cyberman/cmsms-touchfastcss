@@ -8,7 +8,7 @@
  *
  * @category Plugin
  * @author Christoph Gruber <www.touchdesign.de>
- * @version 1.1
+ * @version 1.2
  * @copyright touchDesign 14.07.2009
  * @link http://www.touchdesign.de/
  * @link http://www.homepage-community.de/index.php?topic=1682.0
@@ -170,7 +170,7 @@ function smarty_cms_about_function_touchfastcss() {
   print "  <li>Author Christoph Gruber</li>";
   print "  <li>Support via <a href=\"http://www.homepage-community.de/index.php?topic=1682.0\">HPC</a></li>";
   print "  <li>License GPL 2.0</li>";
-  print "  <li>Version 1.1</li>";
+  print "  <li>Version 1.2</li>";
   print "</ul>";
 }
 
