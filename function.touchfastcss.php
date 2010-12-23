@@ -55,14 +55,14 @@ function smarty_function_touchfastcss($params, &$smarty) {
     'css_path' => null
   );
   $params = array_merge($defaults,$params);
- 
+
   if(!empty($params['css_path'])) {
     $css_path = $params['css_path'];
   } else {
-    $css_path = "tmp" . DIRECTORY_SEPARATOR . "touchfastcss";
+    $css_path = "tmp/touchfastcss";
   }
 
-  $path = $config['root_path'] . DIRECTORY_SEPARATOR . $css_path;
+  $path = $config['root_path'] . "/" . $css_path;
   if(!is_dir($path)){
     mkdir($path);
   }
@@ -90,14 +90,14 @@ function smarty_function_touchfastcss($params, &$smarty) {
       . $row['css_id'] . ", cssName: " . $row['css_name'] . ", cssModified: " 
       . $row['modified_date'] . " */\n";    
     $css[$media]['contents'] .= $row['css_text'];
-    $css[$media]['refresh'] = $row['mtime'] > @filemtime($path . DIRECTORY_SEPARATOR . $css[$media]['file']) 
+    $css[$media]['refresh'] = $row['mtime'] > @filemtime($path . "/" . $css[$media]['file']) 
       ? 1 : (int)$css[$media]['refresh'];
   }
 
   $html = "";
   foreach($css AS $m => $c){
 
-    if(!empty($params['force_rewrite']) || !file_exists($path . DIRECTORY_SEPARATOR . $c['file']) 
+    if(!empty($params['force_rewrite']) || !file_exists($path . "/" . $c['file']) 
       || !empty($c['refresh'])){
       if(!empty($params['replace_relpath'])){
         $c['contents'] = preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $c['contents']);
@@ -105,16 +105,16 @@ function smarty_function_touchfastcss($params, &$smarty) {
       if(!empty($params['cleanup'])){
         $c['contents'] = preg_replace(array('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '/\s+/'), array('',' '), $c['contents']);
       }
-      file_put_contents($path . DIRECTORY_SEPARATOR . $c['file'], $c['headings'].$c['contents']);
+      file_put_contents($path . "/" . $c['file'], $c['headings'].$c['contents']);
     }
     if(!empty($params['chk_mobile']) && isMobile()){
       if($m == 'handheld'){
         $html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
-          . DIRECTORY_SEPARATOR . $css_path . DIRECTORY_SEPARATOR . $c['file'] . "' media='".$m."' />\n";
+          . "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
       }
     }else{
       $html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
-        . DIRECTORY_SEPARATOR . $css_path . DIRECTORY_SEPARATOR . $c['file'] . "' media='".$m."' />\n";
+        . "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
     }
   }
 
