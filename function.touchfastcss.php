@@ -40,8 +40,28 @@
  */
 
 function smarty_function_touchfastcss($params, &$smarty) {
-
   global $gCms;
+
+  // Declare only if not declared...
+  if(!function_exists('touchIsMobile')) {
+    function touchIsMobile() {
+      $agents = array(
+        'Windows CE', 'Pocket', 'Mobile',
+        'Portable', 'Smartphone', 'SDA',
+        'PDA', 'Handheld', 'Symbian',
+        'WAP', 'Palm', 'Avantgo',
+        'cHTML', 'BlackBerry', 'Opera Mini',
+        'Nokia', 'Jasmine'
+      );
+      foreach($agents AS $agent) {
+        if(isset($_SERVER["HTTP_USER_AGENT"]) 
+          && strpos($_SERVER["HTTP_USER_AGENT"], $agent) !== false) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
 
   $config = &$gCms->config;
   $db =& $gCms->GetDb();
@@ -63,11 +83,11 @@ function smarty_function_touchfastcss($params, &$smarty) {
   }
 
   $path = $config['root_path'] . "/" . $css_path;
-  if(!is_dir($path)){
+  if(!is_dir($path)) {
     mkdir($path);
   }
 
-  if (!empty($params['name'])) {
+  if(!empty($params['name'])) {
     $sql = "SELECT css_text, css_id, css_name, media_type, modified_date, UNIX_TIMESTAMP(modified_date) AS mtime 
       FROM ".$config['db_prefix']."css 
       WHERE css_name = " . $db->qstr($params['name']) . " ORDER BY modified_date DESC";
@@ -81,7 +101,7 @@ function smarty_function_touchfastcss($params, &$smarty) {
   }
 
   $css = array();
-  while ($result && $row = $result->FetchRow()){
+  while($result && $row = $result->FetchRow()) {
 
     $media = $row['media_type'] ? $row['media_type'] : 'all';
 
@@ -95,20 +115,21 @@ function smarty_function_touchfastcss($params, &$smarty) {
   }
 
   $html = "";
-  foreach($css AS $m => $c){
+  foreach($css AS $m => $c) {
 
     if(!empty($params['force_rewrite']) || !file_exists($path . "/" . $c['file']) 
-      || !empty($c['refresh'])){
-      if(!empty($params['replace_relpath'])){
+      || !empty($c['refresh'])) {
+      if(!empty($params['replace_relpath'])) {
         $c['contents'] = preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $c['contents']);
       }
-      if(!empty($params['cleanup'])){
+      if(!empty($params['cleanup'])) {
         $c['contents'] = preg_replace(array('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '/\s+/'), array('',' '), $c['contents']);
       }
       file_put_contents($path . "/" . $c['file'], $c['headings'].$c['contents']);
     }
-    if(!empty($params['chk_mobile']) && isMobile()){
-      if($m == 'handheld'){
+
+    if(!empty($params['chk_mobile']) && touchIsMobile()) {
+      if($m == 'handheld') {
         $html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
           . "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
       }
@@ -119,27 +140,6 @@ function smarty_function_touchfastcss($params, &$smarty) {
   }
 
   return "\n<!-- touchFastCss plugin -->\n" . $html . "<!-- touchFastCss plugin -->\n";
-}
-
-function isMobile() {
-
-  $agents = array(
-    'Windows CE', 'Pocket', 'Mobile',
-    'Portable', 'Smartphone', 'SDA',
-    'PDA', 'Handheld', 'Symbian',
-    'WAP', 'Palm', 'Avantgo',
-    'cHTML', 'BlackBerry', 'Opera Mini',
-    'Nokia', 'Jasmine'
-  );
-
-  foreach ($agents AS $agent) {
-    if(isset($_SERVER["HTTP_USER_AGENT"]) 
-      && strpos($_SERVER["HTTP_USER_AGENT"], $agent) !== false){
-      return true;
-    }
-  }
-
-  return false;
 }
 
 function smarty_cms_help_function_touchfastcss() {
