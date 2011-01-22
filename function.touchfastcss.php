@@ -8,7 +8,7 @@
  *
  * @category Plugin
  * @author Christoph Gruber <www.touchdesign.de>
- * @version 1.2
+ * @version 1.3
  * @copyright touchDesign 14.07.2009
  * @link http://www.touchdesign.de/
  * @link http://www.homepage-community.de/index.php?topic=1682.0
@@ -71,7 +71,7 @@ function smarty_function_touchfastcss($params, &$smarty) {
     'name' => null,
     'force_rewrite' => 0,
     'replace_relpath' => 1,
-    'cleanup' => 0,
+    'cleanup' => 1,
     'css_path' => null
   );
   $params = array_merge($defaults,$params);
