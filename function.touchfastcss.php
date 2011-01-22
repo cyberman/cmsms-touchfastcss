@@ -124,6 +124,8 @@ function smarty_function_touchfastcss($params, &$smarty) {
 
     if(!empty($params['force_rewrite']) || !file_exists($path . "/" . $c['file']) 
       || !empty($c['refresh'])) {
+      $c['contents'] = str_replace('[[root_url]]', $config['root_url'], $c['contents']);
+      $c['contents'] = preg_replace('/([\[\/?)(\w+)([^\]]*\])/', '', $c['contents']);
       if(!empty($params['replace_relpath'])) {
         $c['contents'] = preg_replace('/url\((.*?)/is', 'url('.$config['root_url'].'/', $c['contents']);
       }
