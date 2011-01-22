@@ -72,7 +72,8 @@ function smarty_function_touchfastcss($params, &$smarty) {
     'force_rewrite' => 0,
     'replace_relpath' => 1,
     'cleanup' => 1,
-    'css_path' => null
+    'css_path' => null,
+    'comments' => 0
   );
   $params = array_merge($defaults,$params);
 
@@ -106,9 +107,13 @@ function smarty_function_touchfastcss($params, &$smarty) {
     $media = $row['media_type'] ? $row['media_type'] : 'all';
 
     $css[$media]['file'] = $tpl_id . "-" . $media . "-" . "touchFastCss" . ".css";
-    $css[$media]['headings'] = "/* @@@ Plugin ". "touchFastCss" ." @@@ cssId: " 
-      . $row['css_id'] . ", cssName: " . $row['css_name'] . ", cssModified: " 
-      . $row['modified_date'] . " */\n";    
+    if(!empty($params['comments'])) {
+      $css[$media]['headings'] = "/* @@@ Plugin ". "touchFastCss" ." @@@ cssId: " 
+        . $row['css_id'] . ", cssName: " . $row['css_name'] . ", cssModified: " 
+        . $row['modified_date'] . " */\n";
+    } else {
+      $css[$media]['headings'] = "";
+    }
     $css[$media]['contents'] .= $row['css_text'];
     $css[$media]['refresh'] = $row['mtime'] > @filemtime($path . "/" . $css[$media]['file']) 
       ? 1 : (int)$css[$media]['refresh'];
@@ -156,7 +161,8 @@ function smarty_cms_help_function_touchfastcss() {
   print "  <li><em>(optional)</em> chk_mobile - Check user agent for mobile browser</li>";    
   print "  <li><em>(optional)</em> css_path - Path for cached css files, default CMSms tmp_dir/static_sytlesheets</li>";
   print "  <li><em>(optional)</em> replace_relpath - Replace all relative path with absolute url -> background: url(http://www.example.com/tmp/css/name.jpg)</li>";
-  print "  <li><em>(optional)</em> cleanup - Replace comments and whitespaces (experimental)</li>";
+  print "  <li><em>(optional)</em> cleanup - Replace comments and whitespaces (minify)</li>";
+  print "  <li><em>(optional)</em> comments - Add css comments for each generated css file</li>";
   print "</ul>";
 
   smarty_cms_about_function_touchfastcss();
@@ -170,7 +176,7 @@ function smarty_cms_about_function_touchfastcss() {
   print "  <li>Author Christoph Gruber</li>";
   print "  <li>Support via <a href=\"http://www.homepage-community.de/index.php?topic=1682.0\">HPC</a></li>";
   print "  <li>License GPL 2.0</li>";
-  print "  <li>Version 1.2</li>";
+  print "  <li>Version 1.3</li>";
   print "</ul>";
 }
 
