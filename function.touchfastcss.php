@@ -8,7 +8,7 @@
  *
  * @category Plugin
  * @author Christoph Gruber <www.touchdesign.de>
- * @version 1.3
+ * @version 1.4
  * @copyright touchDesign 14.07.2009
  * @link http://www.touchdesign.de/
  * @link http://www.homepage-community.de/index.php?topic=1682.0
@@ -126,6 +126,7 @@ function smarty_function_touchfastcss($params, &$smarty) {
       || !empty($c['refresh'])) {
       $c['contents'] = str_replace('[[root_url]]', $config['root_url'], $c['contents']);
       $c['contents'] = preg_replace('/([\[\/?)(\w+)([^\]]*\])/', '', $c['contents']);
+      $c['contents'] = str_replace(array('{ ',' }'), array('{','}'), $c['contents']);
       if(!empty($params['replace_relpath'])) {
         $c['contents'] = preg_replace('#url\(("|\'|)([^/"\'http:\)][^"\'\)]*)("|\'|)\)#', 'url('.$config['root_url'].'/$2)', $c['contents']);
       }
@@ -178,7 +179,7 @@ function smarty_cms_about_function_touchfastcss() {
   print "  <li>Author Christoph Gruber</li>";
   print "  <li>Support via <a href=\"http://www.homepage-community.de/index.php?topic=1682.0\">HPC</a></li>";
   print "  <li>License GPL 2.0</li>";
-  print "  <li>Version 1.3</li>";
+  print "  <li>Version 1.4</li>";
   print "</ul>";
 }
 
