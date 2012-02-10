@@ -4,12 +4,12 @@
  *
  * touchFastCss Plugin
  *
- * Copyright (c) 2009 touchDesign, <www.touchdesign.de>
+ * Copyright (c) 2009 touchdesign, <www.touchdesign.de>
  *
  * @category Plugin
- * @author Christoph Gruber <www.touchdesign.de>
- * @version 1.4
- * @copyright touchDesign 14.07.2009
+ * @author Christin Gruber <www.touchdesign.de>
+ * @version 1.5
+ * @copyright touchdesign 14.07.2009
  * @link http://www.touchdesign.de/
  * @link http://www.homepage-community.de/index.php?topic=1682.0
  * @link http://dev.cmsmadesimple.org/projects/touchfastcss
@@ -40,7 +40,11 @@
  */
 
 function smarty_function_touchfastcss($params, &$smarty) {
-  global $gCms;
+
+  debug_to_log('touchfastcss');
+  debug_to_log($params);
+  
+  $gCms = cmsms();
 
   // Declare only if not declared...
   if(!function_exists('touchIsMobile')) {
@@ -175,11 +179,11 @@ function smarty_cms_about_function_touchfastcss() {
 
   print "<h3>About</h3>";
   print "<ul>";
-  print "  <li>Copyright by <a href=\"http://www.touchdesign.de/\">touchDesign</a></li>";
-  print "  <li>Author Christoph Gruber</li>";
+  print "  <li>Copyright by <a href=\"http://www.touchdesign.de/\">touchdesign</a></li>";
+  print "  <li>Author Christin Gruber</li>";
   print "  <li>Support via <a href=\"http://www.homepage-community.de/index.php?topic=1682.0\">HPC</a></li>";
   print "  <li>License GPL 2.0</li>";
-  print "  <li>Version 1.4</li>";
+  print "  <li>Version 1.5</li>";
   print "</ul>";
 }
 
