@@ -8,7 +8,7 @@
  *
  * @category Plugin
  * @author Christin Gruber <www.touchdesign.de>
- * @version 1.5
+ * @version 1.6
  * @copyright touchdesign 14.07.2009
  * @link http://www.touchdesign.de/
  * @link http://www.homepage-community.de/index.php?topic=1682.0
@@ -77,7 +77,8 @@ function smarty_function_touchfastcss($params, &$smarty) {
     'replace_relpath' => 1,
     'cleanup' => 1,
     'css_path' => null,
-    'comments' => 0
+    'comments' => 0,
+	'inline' => 0
   );
   $params = array_merge($defaults,$params);
 
@@ -140,18 +141,23 @@ function smarty_function_touchfastcss($params, &$smarty) {
       file_put_contents($path . "/" . $c['file'], $c['headings'].$c['contents']);
     }
 
-    if(!empty($params['chk_mobile']) && touchIsMobile()) {
-      if($m == 'handheld') {
+	if(!$params['inline']) {
+      if(!empty($params['chk_mobile']) && touchIsMobile()) {
+        if($m == 'handheld') {
+          $html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
+            . "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
+        }
+      }else{
         $html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
           . "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
       }
-    }else{
-      $html .= "<link rel='stylesheet' type='text/css' href='".$config['root_url'] 
-        . "/" . $css_path . "/" . $c['file'] . "' media='".$m."' />\n";
-    }
+	} else {
+	  $html .= file_get_contents($path . "/" . $c['file']);
+	}
   }
 
-  return "\n<!-- touchFastCss plugin -->\n" . $html . "<!-- touchFastCss plugin -->\n";
+  return "\n<!-- touchFastCss plugin -->\n" . ($params['inline'] ? '<style type="text/css">' : '' ) 
+	. $html . ($params['inline'] ? '</style>' : '' ) . "\n<!-- touchFastCss plugin -->\n";
 }
 
 function smarty_cms_help_function_touchfastcss() {
@@ -170,6 +176,7 @@ function smarty_cms_help_function_touchfastcss() {
   print "  <li><em>(optional)</em> replace_relpath - Replace all relative path with absolute url -> background: url(http://www.example.com/tmp/css/name.jpg)</li>";
   print "  <li><em>(optional)</em> cleanup - Replace comments and whitespaces (minify)</li>";
   print "  <li><em>(optional)</em> comments - Add css comments for each generated css file</li>";
+  print "  <li><em>(optional)</em> inline - Write inline css</li>";
   print "</ul>";
 
   smarty_cms_about_function_touchfastcss();
@@ -183,7 +190,7 @@ function smarty_cms_about_function_touchfastcss() {
   print "  <li>Author Christin Gruber</li>";
   print "  <li>Support via <a href=\"http://www.homepage-community.de/index.php?topic=1682.0\">HPC</a></li>";
   print "  <li>License GPL 2.0</li>";
-  print "  <li>Version 1.5</li>";
+  print "  <li>Version 1.6</li>";
   print "</ul>";
 }
 
