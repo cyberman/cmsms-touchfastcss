@@ -11,7 +11,6 @@
  * @version 1.6
  * @copyright touchdesign 14.07.2009
  * @link http://www.touchdesign.de/
- * @link http://www.homepage-community.de/index.php?topic=1682.0
  * @link http://dev.cmsmadesimple.org/projects/touchfastcss
  * @license http://www.gnu.org/licenses/licenses.html#GPL GNU General Public License (GPL 2.0)
  * 
@@ -188,7 +187,6 @@ function smarty_cms_about_function_touchfastcss() {
   print "<ul>";
   print "  <li>Copyright by <a href=\"http://www.touchdesign.de/\">touchdesign</a></li>";
   print "  <li>Author Christin Gruber</li>";
-  print "  <li>Support via <a href=\"http://www.homepage-community.de/index.php?topic=1682.0\">HPC</a></li>";
   print "  <li>License GPL 2.0</li>";
   print "  <li>Version 1.6</li>";
   print "</ul>";
